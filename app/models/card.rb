@@ -5,6 +5,8 @@ class Card < ApplicationRecord
 
   after_create :make_card
 
+  private
+
   def make_card
     5.times do |column|
       case column
