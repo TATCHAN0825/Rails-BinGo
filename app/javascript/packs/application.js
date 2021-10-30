@@ -11,6 +11,10 @@ import '../stylesheets/application'
 import 'materialize-css'
 import  '../javascripts/application.js'
 import 'jquery'
+import '@fortawesome/fontawesome-free/js/all'
+
+//画像用
+require.context("../images", true)
 
 Rails.start()
 Turbolinks.start()

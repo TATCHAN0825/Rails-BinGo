@@ -1,0 +1,18 @@
+<%= current_user.name %>さん<br>
+
+りーだー:<%= @board.leader.name %>
+
+<p>players</p>
+<ul>
+  <% @board.cards.each do |card| %>
+    <li><%= card.user.name %></li>
+  <% end %>
+</ul>
+
+<% @board.cards.each do |card| %>
+  <h2><%= card.user.name %>のカード</h2>
+  <%= render 'card', card: card %>
+<% end %>
+
+<%= link_to 'Edit', edit_board_path(@board) %> |
+<%= link_to 'Back', boards_path %>

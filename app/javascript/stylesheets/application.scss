@@ -1,1 +1,58 @@
 @import '~materialize-css/sass/materialize';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@300;400;500&display=swap');
+
+body {
+  font-family: 'Zen Kaku Gothic Antique', sans-serif;
+}
+
+.bingo-card {
+  position: relative;
+}
+
+.open {
+  position: absolute;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 60px;
+}
+
+.number {
+  position: absolute;
+  transform: translateX(-50%);
+  font-size: 45px;
+}
+
+$number_x_start: 54px;
+$number_y_start: 95px;
+$number_x_step: 55px;
+$number_y_step: 55px;
+
+@for $x from 0 through 4 {
+  .number-x-#{$x} {
+    left: $number_x_start + $number_x_step * $x;
+  }
+}
+
+@for $y from 0 through 4 {
+  .number-y-#{$y} {
+    top: $number_y_start + $number_x_step * $y;
+  }
+}
+
+$open_x_start: 54px;
+$open_y_start: 100px;
+$open_x_step: 55px;
+$open_y_step: 55px;
+
+@for $x from 0 through 4 {
+  .open-x-#{$x} {
+    left: $open_x_start + $open_x_step * $x;
+  }
+}
+
+@for $y from 0 through 4 {
+  .open-y-#{$y} {
+    top: $open_y_start + $open_x_step * $y;
+  }
+}

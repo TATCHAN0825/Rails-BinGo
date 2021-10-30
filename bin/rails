@@ -1,4 +1,12 @@
 #!/usr/bin/env ruby.exe
+
+begin
+  File.delete(File.expand_path('../../tmp/pids/server.pid', __FILE__))
+  puts 'server.pidを消したよ'
+rescue => e
+  puts 'server.pid消すときにエラー起きた: ' + e.message
+end
+
 APP_PATH = File.expand_path('../config/application', __dir__)
 require_relative "../config/boot"
 require "rails/commands"

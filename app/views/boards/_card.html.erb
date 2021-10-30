@@ -1,0 +1,11 @@
+<div class="bingo-card">
+  <%= image_pack_tag 'bingo_card_template.png' %>
+  <% card.numbers.each do |number| %>
+    <% if number.value %>
+      <span class="number number-x-<%= number.column %> number-y-<%= number.row %>"><%= number.value %></span>
+      <% if number.open? %>
+        <%= image_pack_tag 'mark_batsu.png', class: "open open-x-#{number.column} open-y-#{number.row}" %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

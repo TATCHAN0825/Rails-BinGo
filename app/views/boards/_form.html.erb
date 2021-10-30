@@ -1,0 +1,23 @@
+<%= form_with(model: board) do |form| %>
+  <% if board.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(board.errors.count, "error") %> prohibited this board from being saved:</h2>
+
+      <ul>
+        <% board.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form.label :name %><br>
+  <%= form.text_field :name %><br>
+
+  <%= form.label :keyword %><br>
+  <%= form.text_field :keyword %><br>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

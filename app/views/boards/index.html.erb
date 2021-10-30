@@ -1,0 +1,53 @@
+<h1>Boards</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th><%= Board.human_attribute_name(:name) %></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @boards.each do |board| %>
+      <tr>
+        <td><%= board.name %></td>
+        <% if board.keyword.blank? %>
+          <td>
+            <%= form_with(url: boards_join_path(board), method: :post) do |form| %>
+              <%= form.hidden_field :keyword, value: '' %>
+              <%= form.submit 'Join', class: 'waves-effect waves-light btn' %>
+            <% end %>
+          </td>
+        <% else %>
+          <td>
+            <%= link_to '#' + board.id.to_s, class: 'waves-effect waves-light btn modal-trigger' do %>
+              Join <i class="fas fa-lock fa-fw"></i>
+            <% end %>
+          </td>
+        <% end %>
+        <td><%= link_to 'Edit', edit_board_path(board) %></td>
+        <td><%= link_to 'Destroy', board, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% @boards.each do |board| %>
+  <div id="<%= board.id %>" class="modal">
+    <%= form_with(url: boards_join_path(board), method: :post) do |form| %>
+      <div class="modal-content">
+        <h4><%= Board.human_attribute_name :keyword %></h4>
+        <%= form.label :keyword, Board.human_attribute_name(:keyword) %>
+        <%= form.text_field :keyword, class: 'validate' %>
+      </div>
+      <div class="modal-footer">
+        <%= form.submit 'Join', class: 'modal-close waves-effect waves-green btn-flat' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<br>
+
+<%= link_to 'New Board', new_board_path %>
