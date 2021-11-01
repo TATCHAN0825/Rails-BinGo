@@ -4,7 +4,7 @@
     <% if number.value %>
       <span class="number number-x-<%= number.column %> number-y-<%= number.row %>"><%= number.value %></span>
       <% if number.open? %>
-        <%= image_pack_tag 'mark_batsu.png', class: "open open-x-#{number.column} open-y-#{number.row}" %>
+        <%= image_pack_tag 'mark_batsu.png', class: "number-open open-x-#{number.column} open-y-#{number.row}" %>
       <% end %>
     <% end %>
   <% end %>

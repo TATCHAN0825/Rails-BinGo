@@ -10,9 +10,11 @@ body {
   position: relative;
 }
 
-.open {
+.number-open {
   position: absolute;
   transform: translateX(-50%);
+  width: 60px;
+  height: 60px;
 }
 
 .number {
