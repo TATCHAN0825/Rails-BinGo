@@ -26,27 +26,15 @@
   <%= render 'card', card: card %>
 <% end %>
 
-
-<%= form_with(url: boards_join_path(@board), method: :post) do |form| %>
-  <%= form.hidden_field :keyword, value: @board.keyword %>
-
-
-  <% @board.cards.each do |card| %>
-    <% if p card.ready %>
-      <%= form.hidden_field :ready, value: "false" %>
-      <%= button_tag type: 'submit', class: "btn-floating btn-large waves-effect waves-light red", id: "ready-button" do %>
-        <i class="fas fa-check"></i>
-      <% end %>
-    <% else %>
-      <%= form.hidden_field :ready, value: "true" %>
-      <%= button_tag type: 'submit', class: "btn-floating btn-large waves-effect waves-light green", id: "ready-button" do %>
-        <i class="fas fa-check"></i>
-      <% end %>
-    <% end %>
+<% if @board.cards.find_by(user_id: current_user.id).ready %>
+  <%= button_tag class: "btn-floating btn-large waves-effect waves-light red", id: "ready-button" do %>
+    <i class="fas fa-check"></i>
+  <% end %>
+<% else %>
+  <%= button_tag class: "btn-floating btn-large waves-effect waves-light green", id: "ready-button" do %>
+    <i class="fas fa-check"></i>
   <% end %>
 <% end %>
-
-
 
 <%= link_to 'Edit', edit_board_path(@board) %> |
 <%= link_to 'Back', boards_path %>
