@@ -61,17 +61,9 @@ class BoardsController < ApplicationController
     if keyword == @board.keyword
       flash[:notice] = 'joinしたお'
       redirect_to board_path(@board)
-
     else
       flash[:alert] = 'キーワードが間違ってるよ'
       redirect_to boards_path
-    end
-    if params[:ready] === "true"
-      flash[:notice] = "準備完了にしたよ"
-      current_user.cards.where(user_id: current_user.id, board_id: @board.id).update(ready: true)
-    elsif params[:ready] === "false"
-      flash[:notice] = "準備できてませんにしたよ"
-      current_user.cards.where(user_id: current_user.id, board_id: @board.id).update(ready: false)
     end
   end
 

@@ -1,3 +1,5 @@
+<h1>フェーズ: <%= @board.phase %></h1>
+
 りーだー:<%= @board.leader.name %><br>
 <% @board.cards.each do |card| %>
 <% end %>
@@ -7,13 +9,13 @@
   <% @board.cards.each do |card| %>
     <% if card.ready %>
       <li><%= card.user.name %>
-        <span style="color: Green;">
+        <span style="color: green;" class="ready-check" id = user_id<%=card.user.id %>>
         <i class="fas fa-check"></i>
           </span>
       </li>
     <% else %>
       <li><%= card.user.name %>
-        <span style="color: Red;">
+        <span style="color: red;" class="ready-check" id = user_id<%=card.user.id %>>
         <i class="fas fa-check"></i>
           </span>
       </li>
