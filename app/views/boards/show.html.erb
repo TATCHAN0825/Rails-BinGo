@@ -1,4 +1,6 @@
-<h1>フェーズ: <%= @board.phase %></h1>
+<p id="board-id" style="display: none"><%= @board.id %></p>
+
+<h1>フェーズ: <span id="phase"><%= @board.phase %></span></h1>
 
 りーだー:<%= @board.leader.name %><br>
 
@@ -7,13 +9,13 @@
   <% @board.cards.each do |card| %>
     <% if card.ready %>
       <li><%= card.user.name %>
-        <span style="color: green;" class="ready-check" id = user_id<%=card.user.id %>>
+        <span style="color: green;" class="ready-check" id="user_id<%= card.user.id %>">
         <i class="fas fa-check"></i>
           </span>
       </li>
     <% else %>
       <li><%= card.user.name %>
-        <span style="color: red;" class="ready-check" id = user_id<%=card.user.id %>>
+        <span style="color: red;" class="ready-check" id="user_id<%= card.user.id %>">
         <i class="fas fa-check"></i>
           </span>
       </li>
@@ -21,10 +23,14 @@
   <% end %>
 </ul>
 
-<% @board.cards.each do |card| %>
-  <h2><%= card.user.name %>のカード</h2>
-  <%= render 'card', card: card %>
-<% end %>
+<div class="center-align">
+  <% @board.cards.each do |card| %>
+    <div style="display: inline-block">
+      <h5><%= card.user == current_user ? 'あなた' : card.user.name %>のカード</h5>
+      <%= render 'card', card: card %>
+    </div>
+  <% end %>
+</div>
 
 <% if @board.cards.find_by(user_id: current_user.id).ready %>
   <%= button_tag class: "btn-floating btn-large waves-effect waves-light red", id: "ready-button" do %>
