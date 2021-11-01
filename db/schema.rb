@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_31_124930) do
+ActiveRecord::Schema.define(version: 2021_10_31_183827) do
 
   create_table "boards", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2021_10_31_124930) do
     t.string "name"
     t.string "keyword"
     t.integer "leader_id"
+    t.integer "phase", default: 0
     t.index ["leader_id"], name: "index_boards_on_leader_id"
   end
 
@@ -26,7 +27,7 @@ ActiveRecord::Schema.define(version: 2021_10_31_124930) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
-    t.boolean "ready"
+    t.boolean "ready", default: false
     t.index ["board_id"], name: "index_cards_on_board_id"
     t.index ["user_id"], name: "index_cards_on_user_id"
   end
