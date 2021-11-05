@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_31_183827) do
+ActiveRecord::Schema.define(version: 2021_11_03_190531) do
 
   create_table "boards", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(version: 2021_10_31_183827) do
     t.string "keyword"
     t.integer "leader_id"
     t.integer "phase", default: 0
+    t.integer "current_id"
+    t.index ["current_id"], name: "index_boards_on_current_id"
     t.index ["leader_id"], name: "index_boards_on_leader_id"
   end
 
@@ -30,6 +32,14 @@ ActiveRecord::Schema.define(version: 2021_10_31_183827) do
     t.boolean "ready", default: false
     t.index ["board_id"], name: "index_cards_on_board_id"
     t.index ["user_id"], name: "index_cards_on_user_id"
+  end
+
+  create_table "number_open_logs", force: :cascade do |t|
+    t.integer "board_id", null: false
+    t.integer "value", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["board_id"], name: "index_number_open_logs_on_board_id"
   end
 
   create_table "numbers", force: :cascade do |t|
@@ -62,7 +72,9 @@ ActiveRecord::Schema.define(version: 2021_10_31_183827) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "boards", "users", column: "current_id"
   add_foreign_key "boards", "users", column: "leader_id"
   add_foreign_key "cards", "boards"
+  add_foreign_key "number_open_logs", "boards"
   add_foreign_key "numbers", "cards"
 end

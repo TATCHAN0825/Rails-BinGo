@@ -23,6 +23,16 @@ body {
   font-size: 45px;
 }
 
+.number-not-open {
+  display: none;
+}
+
+//タグ付け用
+@for $i from 1 through 75 {
+  .open-#{$i} {
+  }
+}
+
 $number_x_start: 54px;
 $number_y_start: 95px;
 $number_x_step: 55px;

@@ -1,27 +1,60 @@
+<%= javascript_pack_tag 'board/show', 'data-turbolinks-track': 'reload' %>
+
 <p id="board-id" style="display: none"><%= @board.id %></p>
+<p id="user-id" style="display: none"><%= current_user.id %></p>
 
-<h1>フェーズ: <span id="phase"><%= @board.phase %></span></h1>
+<p id="error_message" style="color: red"></p>
 
-りーだー:<%= @board.leader.name %><br>
+<h3>フェーズ: <span id="phase"><%= @board.phase %></span></h3>
 
-<p>players</p>
-<ul>
-  <% @board.cards.each do |card| %>
-    <% if card.ready %>
-      <li><%= card.user.name %>
-        <span style="color: green;" class="ready-check" id="user_id<%= card.user.id %>">
+<div class="row">
+  <div class="col s2">
+    準備完了
+    <% if @board.cards.find_by(user_id: current_user.id).ready %>
+      <%= button_tag class: "btn-floating btn-large waves-effect waves-light red disabled", id: "ready-button" do %>
         <i class="fas fa-check"></i>
-          </span>
-      </li>
+      <% end %>
     <% else %>
-      <li><%= card.user.name %>
-        <span style="color: red;" class="ready-check" id="user_id<%= card.user.id %>">
+      <%= button_tag class: "btn-floating btn-large waves-effect waves-light green", id: "ready-button" do %>
         <i class="fas fa-check"></i>
-          </span>
-      </li>
+      <% end %>
     <% end %>
-  <% end %>
-</ul>
+  </div>
+
+  <div class="col s3">
+    <ul>
+      <% @board.cards.each do |card| %>
+        <% if card.ready %>
+          <li>
+            <% if card.user == @board.leader %>
+              <i class="fas fa-crown" style="color: orange;"></i>
+            <% else %>
+              <i class="fas fa-crown" style="color: orange; visibility:hidden;"></i>
+            <% end %>
+            <%= card.user.name %>
+            <span style="color: green;" class="ready-check" id="user_id<%= card.user.id %>">
+              <i class="fas fa-check"></i>
+            </span>
+          </li>
+        <% else %>
+          <li>
+            <% if card.user == @board.leader %>
+              <i class="fas fa-crown" style="color: orange;"></i>
+            <% else %>
+              <i class="fas fa-crown" style="color: orange; visibility:hidden;"></i>
+            <% end %>
+            <%= card.user.name %>
+            <span style="color: gray;" class="ready-check" id="user_id<%= card.user.id %>">
+              <i class="fas fa-check"></i>
+            </span>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+</div>
+
+<div class="divider"></div>
 
 <div class="center-align">
   <% @board.cards.each do |card| %>
@@ -32,15 +65,32 @@
   <% end %>
 </div>
 
-<% if @board.cards.find_by(user_id: current_user.id).ready %>
-  <%= button_tag class: "btn-floating btn-large waves-effect waves-light red", id: "ready-button" do %>
-    <i class="fas fa-check"></i>
+<div class="divider"></div>
+
+<h3 style="color: orange;" id="your-turn-message"></h3>
+
+<div class="row">
+  <div class="col s3">
+    <%= button_tag class: "btn btn-large waves-effect waves-light red disabled", id: "start-button" do %>
+      <i class="fas fa-play fa-fw"></i>スタート
+    <% end %>
+  </div>
+  <div class="col s1">
+    <span id="bingo-number" style="font-size: 35px"></span>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<p>出た履歴</p>
+
+<div id="histories">
+  <% @board.number_open_logs.each do |number_open_log| %>
+    <%= button_tag number_open_log.value, class: "btn-floating btn-large waves-effect waves-light red" %>
   <% end %>
-<% else %>
-  <%= button_tag class: "btn-floating btn-large waves-effect waves-light green", id: "ready-button" do %>
-    <i class="fas fa-check"></i>
-  <% end %>
-<% end %>
+</div>
+
+<div class="divider"></div>
 
 <%= link_to 'Edit', edit_board_path(@board) %> |
 <%= link_to 'Back', boards_path %>

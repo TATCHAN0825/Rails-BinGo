@@ -4,6 +4,7 @@ class Card < ApplicationRecord
   has_many :numbers, dependent: :destroy
 
   after_create :make_card
+  after_create :send_join
 
   private
 
@@ -32,5 +33,9 @@ class Card < ApplicationRecord
         self.numbers.create!(value: column == 2 && row == 2 ? nil : values.shift, column: column, row: row)
       end
     end
+  end
+
+  def send_join
+    
   end
 end

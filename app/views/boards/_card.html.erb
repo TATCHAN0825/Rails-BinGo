@@ -3,9 +3,7 @@
   <% card.numbers.each do |number| %>
     <% if number.value %>
       <span class="number number-x-<%= number.column %> number-y-<%= number.row %>"><%= number.value %></span>
-      <% if number.open? %>
-        <%= image_pack_tag 'mark_batsu.png', class: "number-open open-x-#{number.column} open-y-#{number.row}" %>
-      <% end %>
+      <%= image_pack_tag 'mark_batsu.png', class: "number-open open-x-#{number.column} open-y-#{number.row} open-#{number.value}" + (number.open ? "" : " number-not-open") %>
     <% end %>
   <% end %>
 </div>
