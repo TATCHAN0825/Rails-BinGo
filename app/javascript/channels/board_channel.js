@@ -211,6 +211,14 @@ document.addEventListener("turbolinks:load", function () {
             } else if (type === "winner") {
                 let name = data["name"];
                 $("#winner-box").html("かったひと: " + name);
+            } else if (type === "close") {
+                let seconds = data["seconds"];
+                setInterval(function () {
+                    seconds--;
+                    $("#close-count-box").html("終了まであと" + seconds + "秒");
+                }, 1000);
+            } else if (type === "closed") {
+                Turbolinks.visit($("#back-link").attr("href"));
             } else if (type === "reload") {
                 location.reload();
             } else if (type === "error") {

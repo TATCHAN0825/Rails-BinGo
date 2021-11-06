@@ -92,6 +92,9 @@ class BoardChannel < ApplicationCable::Channel
 
     BoardBroadcastJob.perform_later(@board.id, { type: 'winner', name: user.name })
 
-
+    seconds = 10
+    #BoardDestroyJob.set(wait: seconds.seconds).perform_later(@board.id)
+    BoardBroadcastJob.perform_later(@board.id, { type: 'close', seconds: seconds })
+    BoardCloseJob.set(wait: seconds.seconds).perform_later(@board.id)
   end
 end

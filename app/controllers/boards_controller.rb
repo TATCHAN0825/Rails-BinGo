@@ -4,7 +4,7 @@ class BoardsController < ApplicationController
 
   # GET /boards
   def index
-    @boards = Board.all
+    @boards = Board.where.not(phase: :close)
   end
 
   # GET /boards/1

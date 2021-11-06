@@ -1,0 +1,10 @@
+<h1><%= @user.name %></h1>
+
+<ul>
+  <li>通算参加ゲーム数: <%= @user.joined_boards.size %></li>
+  <li>勝利数: <%= @user.win_boards.size %></li>
+  <li>敗北数: <%= @user.lose_boards.size %></li>
+  <% if (@user.win_boards.size + @user.lose_boards.size) > 0 %>
+    <li>勝率: <%= @user.win_boards.size / (@user.win_boards.size + @user.lose_boards.size) %></li>
+  <% end %>
+</ul>

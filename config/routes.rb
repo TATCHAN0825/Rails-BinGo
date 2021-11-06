@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   root 'home#index'
   resources :boards
   post 'boards/:id/join' => 'boards#join', as: :boards_join
+  get 'profile/:name' => 'profile#show'
 end

@@ -5,7 +5,7 @@ class Board < ApplicationRecord
   belongs_to :current, class_name: 'User', optional: true
   belongs_to :winner, class_name: 'User', optional: true
 
-  enum phase: %i[wait ready game end] # wait: 準備完了待機中, ready: 全員準備完了, game: ゲーム中, end: ゲーム終了
+  enum phase: %i[wait ready game end close] # wait: 準備完了待機中, ready: 全員準備完了, game: ゲーム中, end: ゲーム終了, close: もうはいれない
 
   validates :name, presence: true, uniqueness: true
 

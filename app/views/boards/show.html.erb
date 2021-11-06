@@ -13,6 +13,8 @@
   <% end %>
 </p>
 
+<p id="close-count-box"></p>
+
 <div class="row">
   <div class="col s2">
     準備完了
@@ -105,4 +107,4 @@
 <div class="divider"></div>
 
 <%= link_to 'Edit', edit_board_path(@board) %> |
-<%= link_to 'Back', boards_path %>
+<%= link_to 'Back', boards_path, id: 'back-link' %>
