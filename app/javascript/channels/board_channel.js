@@ -6,6 +6,87 @@ let board;
 let lotteryIntervalId;
 let cards = [];
 let myId;
+let historyNumbers = [];
+
+function checkCardisOpen(index, indexx, indexy) {
+    if (indexx === 2 && indexy === 2) {
+        return true;//FREE
+    }
+    var res = false;
+    $.each(cards[index], function (index, value) {
+        let x = value["x"];
+        let y = value["y"];
+        let v = value["value"];
+        if (indexx === Number(x) && indexy === Number(y)) {
+            if ($.inArray(Number(v), historyNumbers) !== -1) {
+                res = true;
+                return false;
+            }
+        }
+    });
+    return res;
+}
+
+function checkBingoLine(index) {
+    let bingo;
+
+    //縦ライン
+    for (let x = 0; x < 5; x++) {
+        bingo = true;
+        for (let y = 0; y < 5; y++) {
+            if (!checkCardisOpen(index, x, y)) {
+                bingo = false;
+                break;
+            }
+        }
+        if (bingo) {
+            return true;
+        }
+    }
+
+    //横ライン
+    for (let y = 0; y < 5; y++) {
+        bingo = true;
+        for (let x = 0; x < 5; x++) {
+            if (!checkCardisOpen(index, x, y)) {
+                bingo = false;
+                break;
+            }
+        }
+        if (bingo) {
+            return true;
+        }
+    }
+
+    //右斜め
+    bingo = true;
+    for (let i = 0; i < 5; i++) {
+        if (!checkCardisOpen(index, i, i)) {
+            bingo = false;
+            break;
+        }
+    }
+    if (bingo) {
+        return true;
+    }
+
+    //左斜め
+    bingo = true;
+    for (let i = 4; i >= 0; i--) {
+        if (!checkCardisOpen(index, i, i)) {
+            bingo = false;
+            break;
+        }
+    }
+    if (bingo) {
+        return true;
+    }
+
+    return false;
+}
+
+/* */
+
 
 document.addEventListener("turbolinks:load", function () {
     myId = parseInt($("#user-id").html());
@@ -15,9 +96,9 @@ document.addEventListener("turbolinks:load", function () {
         $(card).find(".number").each(function (j, number) {
             let numberClass = $(number).attr("class");
             cards[i][j] = {
-                x: /number-x-(\d)/.exec(numberClass)[1],
-                y: /number-y-(\d)/.exec(numberClass)[1],
-                value: $(number).html()
+                x: Number(/number-x-(\d)/.exec(numberClass)[1]),
+                y: Number(/number-y-(\d)/.exec(numberClass)[1]),
+                value: Number($(number).html()),
             };
         });
     });
@@ -35,6 +116,9 @@ document.addEventListener("turbolinks:load", function () {
         },
 
         received(data) {
+            console.log("received data:");
+            console.log(data);
+
             let type = data["type"];
             if (type === "update_ready") {
                 let user_id = data["user_id"]
@@ -63,15 +147,25 @@ document.addEventListener("turbolinks:load", function () {
                 }, 100);
             } else if (type === "lottery_stop") {
                 let result = data["result"];
-
+                let user = data["user"];
                 console.log("result:");
                 console.log(result);
+                console.log("user:");
+                console.log(user);
 
                 clearInterval(lotteryIntervalId);
                 $("#bingo-number").html(result);
 
                 let histories = $("#histories");
-                histories.html(histories.html() + '<button name="button" type="submit" class="btn-floating btn-large waves-effect waves-light red">' + result + '</button>');
+                histories.html(histories.html() + '<button name="button" type="submit" class="btn-floating btn-large red">' + result + '</button>');
+
+                historyNumbers = [];
+                histories.find("button").each(function (index, element) {
+                    let number = Number(element.innerHTML);
+                    historyNumbers.push(number);
+                });
+
+                console.log(historyNumbers);
 
                 /*cards.forEach(function (numbers) {
                     numbers.forEach(function (number) {
@@ -86,13 +180,39 @@ document.addEventListener("turbolinks:load", function () {
 
                 $(`.open-${result}`).removeClass("number-not-open");
 
-                this.perform("next_user");
+                $.each(cards, function (index) {
+                    if (checkBingoLine(index)) {
+                        let user = $($(".bingo-card")[index]).data("user-id");
+                        board.perform("bingo", {user: user});
+                    }
+                });
+
+                if (user === myId) {
+                    console.log("next user from:" + myId);
+                    this.perform("next_user");
+                }
             } else if (type === "your_turn") {
                 let id = data["id"];
+
+                console.log(`your turn for: ${id}`);
+                console.log(`my-id: ${myId}`);
+
                 if (id === myId) {
                     $("#your-turn-message").html("あなたのターン");
                     $("#start-button").removeClass("disabled");
                 }
+            } else if (type === "join") {
+                let user = data["user"];
+
+                if (user !== myId) {
+                    //リロード
+                    Turbolinks.visit(location.href);
+                }
+            } else if (type === "winner") {
+                let name = data["name"];
+                $("#winner-box").html("かったひと: " + name);
+            } else if (type === "reload") {
+                location.reload();
             } else if (type === "error") {
                 let message = data["message"];
                 let errorMessage = $('#error_message');
@@ -128,6 +248,7 @@ document.addEventListener("turbolinks:load", function () {
     startButton.on("click", function () {
         $("#your-turn-message").html("");
         startButton.addClass("disabled");
+        console.log("lottery_start_request");
         board.perform("lottery_start_request");
     });
 });

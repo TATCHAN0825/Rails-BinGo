@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_03_190531) do
+ActiveRecord::Schema.define(version: 2021_11_06_210413) do
 
   create_table "boards", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
@@ -20,8 +20,10 @@ ActiveRecord::Schema.define(version: 2021_11_03_190531) do
     t.integer "leader_id"
     t.integer "phase", default: 0
     t.integer "current_id"
+    t.integer "winner_id"
     t.index ["current_id"], name: "index_boards_on_current_id"
     t.index ["leader_id"], name: "index_boards_on_leader_id"
+    t.index ["winner_id"], name: "index_boards_on_winner_id"
   end
 
   create_table "cards", force: :cascade do |t|
@@ -74,6 +76,7 @@ ActiveRecord::Schema.define(version: 2021_11_03_190531) do
 
   add_foreign_key "boards", "users", column: "current_id"
   add_foreign_key "boards", "users", column: "leader_id"
+  add_foreign_key "boards", "users", column: "winner_id"
   add_foreign_key "cards", "boards"
   add_foreign_key "number_open_logs", "boards"
   add_foreign_key "numbers", "cards"

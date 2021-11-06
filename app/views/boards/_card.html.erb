@@ -1,4 +1,4 @@
-<div class="bingo-card">
+<div class="bingo-card" data-user-id=<%= current_user.id %>>
   <%= image_pack_tag 'bingo_card_template.png' %>
   <% card.numbers.each do |number| %>
     <% if number.value %>

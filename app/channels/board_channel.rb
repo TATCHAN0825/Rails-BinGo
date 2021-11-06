@@ -9,6 +9,8 @@ class BoardChannel < ApplicationCable::Channel
   end
 
   def ready(args)
+    @board = Board.find(@board.id)
+
     ready = args['ready']
     card = @board.card_for(current_user)
     if ready === true
@@ -18,16 +20,20 @@ class BoardChannel < ApplicationCable::Channel
     end
     if @board.cards.where(ready: false).size <= 0 # 準備完了してない人が0人以下だったら
       @board.update(phase: :ready)
+      @board.update(phase: :game)
 
       @board.update(current: @board.users.first)
 
-      BoardBroadcastJob.perform_later(@board.id, { type: 'your_turn', id: @board.current.id })
+      #BoardBroadcastJob.perform_later(@board.id, { type: 'your_turn', id: @board.current.id })
     end
 
-    BoardBroadcastJob.perform_later(@board.id, { type: 'update_ready', user_id: current_user.id, ready: ready })
+    #BoardBroadcastJob.perform_later(@board.id, { type: 'update_ready', user_id: current_user.id, ready: ready })
+    BoardBroadcastJob.perform_later(@board.id, { type: 'reload' })
   end
 
   def lottery_start_request
+    @board = Board.find(@board.id)
+
     numbers = [*1..75]
 
     @board.number_open_logs.each do |number_open_log|
@@ -50,14 +56,18 @@ class BoardChannel < ApplicationCable::Channel
 
     @board.number_open_logs.create!(value: result)
 
-    # ないとうごかない
-    @board = Board.find(@board.id)
-
     BoardBroadcastJob.perform_later(@board.id, { type: 'lottery_start', numbers: numbers.shuffle })
-    BoardBroadcastJob.set(wait: rand(3..8).seconds).perform_later(@board.id, { type: 'lottery_stop', result: result, user: @board.current.id })
+    #BoardBroadcastJob.set(wait: rand(3..8).seconds).perform_later(@board.id, { type: 'lottery_stop', result: result, user: @board.current.id })
+    BoardBroadcastJob.perform_later(@board.id, { type: 'lottery_stop', result: result, user: @board.current.id })
   end
 
   def next_user
+    @board = Board.find(@board.id)
+
+    unless @board.phase == 'game'
+      return
+    end
+
     next_current = false
     current = nil
     @board.users.each do |user|
@@ -71,5 +81,17 @@ class BoardChannel < ApplicationCable::Channel
     @board.update(current: current)
 
     BoardBroadcastJob.perform_later(@board.id, { type: 'your_turn', id: @board.current.id })
+  end
+
+  def bingo(data)
+    @board = Board.find(@board.id)
+
+    user = User.find(data['user'])
+
+    @board.update(phase: :end, current: nil, winner: user)
+
+    BoardBroadcastJob.perform_later(@board.id, { type: 'winner', name: user.name })
+
+
   end
 end

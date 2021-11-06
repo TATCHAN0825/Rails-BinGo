@@ -7,6 +7,12 @@
 
 <h3>フェーズ: <span id="phase"><%= @board.phase %></span></h3>
 
+<p id="winner-box">
+  <% if @board.winner %>
+    かったひと: <%= @board.winner.name %>
+  <% end %>
+</p>
+
 <div class="row">
   <div class="col s2">
     準備完了
@@ -67,12 +73,18 @@
 
 <div class="divider"></div>
 
-<h3 style="color: orange;" id="your-turn-message"></h3>
+<h3 style="color: orange;" id="your-turn-message"><%= @board.current == current_user ? 'あなたのターン' : '' %></h3>
 
 <div class="row">
   <div class="col s3">
-    <%= button_tag class: "btn btn-large waves-effect waves-light red disabled", id: "start-button" do %>
-      <i class="fas fa-play fa-fw"></i>スタート
+    <% if @board.current == current_user %>
+      <%= button_tag class: "btn btn-large waves-effect waves-light red", id: "start-button" do %>
+        <i class="fas fa-play fa-fw"></i>スタート
+      <% end %>
+    <% else %>
+      <%= button_tag class: "btn btn-large waves-effect waves-light red disabled", id: "start-button" do %>
+        <i class="fas fa-play fa-fw"></i>スタート
+      <% end %>
     <% end %>
   </div>
   <div class="col s1">

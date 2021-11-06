@@ -65,6 +65,8 @@ class BoardsController < ApplicationController
       flash[:alert] = 'キーワードが間違ってるよ'
       redirect_to boards_path
     end
+
+    BoardBroadcastJob.perform_later(@board.id, { type: 'join', user: current_user.id })
   end
 
   private
