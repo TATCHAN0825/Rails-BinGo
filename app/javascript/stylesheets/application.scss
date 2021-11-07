@@ -4,6 +4,25 @@
 
 body {
   font-family: 'Zen Kaku Gothic Antique', sans-serif;
+  padding-bottom: 20%;
+}
+
+#chat {
+  position: fixed;
+  bottom: 0;
+  width: 70%;
+  height: 30%;
+  background: white;
+  z-index: 100;
+}
+
+#chat-content {
+  overflow: scroll;
+  height: 60%;
+}
+
+#chat-send {
+  width: 100px;
 }
 
 .bingo-card {

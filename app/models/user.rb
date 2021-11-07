@@ -7,6 +7,7 @@ class User < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   has_many :cards, dependent: :destroy
   has_many :boards
+  has_many :chats, dependent: :destroy
 
   # 参加して終わったBoards
   def joined_boards
