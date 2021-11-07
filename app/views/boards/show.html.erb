@@ -65,9 +65,14 @@
 <div class="divider"></div>
 
 <div class="center-align">
-  <% @board.cards.each do |card| %>
+  <% card = @board.cards.find_by!(user_id: current_user.id) %>
+  <div style="display: inline-block">
+    <h5>あなたのカード</h5>
+    <%= render 'card', card: card %>
+  </div>
+  <% @board.cards.where.not(user_id: current_user.id).each do |card| %>
     <div style="display: inline-block">
-      <h5><%= card.user == current_user ? 'あなた' : card.user.name %>のカード</h5>
+      <h5><%= card.user.name %>のカード</h5>
       <%= render 'card', card: card %>
     </div>
   <% end %>
