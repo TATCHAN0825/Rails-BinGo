@@ -57,8 +57,8 @@ class BoardChannel < ApplicationCable::Channel
     @board.number_open_logs.create!(value: result)
 
     BoardBroadcastJob.perform_later(@board.id, { type: 'lottery_start', numbers: numbers.shuffle })
-    #BoardBroadcastJob.set(wait: rand(3..8).seconds).perform_later(@board.id, { type: 'lottery_stop', result: result, user: @board.current.id })
-    BoardBroadcastJob.perform_later(@board.id, { type: 'lottery_stop', result: result, user: @board.current.id })
+    BoardBroadcastJob.set(wait: rand(3..8).seconds).perform_later(@board.id, { type: 'lottery_stop', result: result, user: @board.current.id })
+    #BoardBroadcastJob.perform_later(@board.id, { type: 'lottery_stop', result: result, user: @board.current.id })
   end
 
   def next_user
