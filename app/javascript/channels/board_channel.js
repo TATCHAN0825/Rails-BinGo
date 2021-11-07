@@ -198,9 +198,13 @@ document.addEventListener("turbolinks:load", function () {
                 console.log(`my-id: ${myId}`);
 
                 if (id === myId) {
-                    $("#your-turn-message").html("あなたのターン");
+                    $("#turn-message").html("あなたのターン");
                     $("#start-button").removeClass("disabled");
                 }
+            } else if (type === "turn") {
+                let name = data["name"];
+
+                $("#turn-message").html(name + "のターン");
             } else if (type === "join") {
                 let user = data["user"];
 
@@ -254,7 +258,6 @@ document.addEventListener("turbolinks:load", function () {
 
     let startButton = $("#start-button");
     startButton.on("click", function () {
-        $("#your-turn-message").html("");
         startButton.addClass("disabled");
         console.log("lottery_start_request");
         board.perform("lottery_start_request");
