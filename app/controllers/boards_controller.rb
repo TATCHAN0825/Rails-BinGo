@@ -54,6 +54,11 @@ class BoardsController < ApplicationController
 
   # POST /boards/1/join
   def join
+    unless @board.wait?
+      flash[:alert] = 'ゲーム中のため入れません'
+      redirect_to boards_path
+      return
+    end
     keyword = params[:keyword]
     unless @board.cards.find_by(user_id: current_user.id)
       current_user.cards.create(board: @board)
