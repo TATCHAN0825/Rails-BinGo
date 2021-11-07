@@ -48,6 +48,11 @@ class BoardsController < ApplicationController
 
   # DELETE /boards/1
   def destroy
+    unless @board.leader == current_user
+      flash[:alert] = 'リーダー以外は削除できません'
+      redirect_to boards_path
+      return
+    end
     @board.destroy
     redirect_to boards_url, notice: 'Board was successfully destroyed.'
   end
