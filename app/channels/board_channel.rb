@@ -98,4 +98,12 @@ class BoardChannel < ApplicationCable::Channel
     BoardBroadcastJob.perform_later(@board.id, { type: 'close', seconds: seconds })
     BoardCloseJob.set(wait: seconds.seconds).perform_later(@board.id)
   end
+
+  def chat_send(data)
+    @board = Board.find(@board.id)
+
+    message = data['message']
+
+    current_user.chats.create!(board: @board, content: message)
+  end
 end

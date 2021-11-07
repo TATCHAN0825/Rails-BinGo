@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_06_210413) do
+ActiveRecord::Schema.define(version: 2021_11_07_202851) do
 
   create_table "boards", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
@@ -34,6 +34,16 @@ ActiveRecord::Schema.define(version: 2021_11_06_210413) do
     t.boolean "ready", default: false
     t.index ["board_id"], name: "index_cards_on_board_id"
     t.index ["user_id"], name: "index_cards_on_user_id"
+  end
+
+  create_table "chats", force: :cascade do |t|
+    t.integer "board_id", null: false
+    t.integer "user_id", null: false
+    t.text "content", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["board_id"], name: "index_chats_on_board_id"
+    t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
   create_table "number_open_logs", force: :cascade do |t|
@@ -78,6 +88,8 @@ ActiveRecord::Schema.define(version: 2021_11_06_210413) do
   add_foreign_key "boards", "users", column: "leader_id"
   add_foreign_key "boards", "users", column: "winner_id"
   add_foreign_key "cards", "boards"
+  add_foreign_key "chats", "boards"
+  add_foreign_key "chats", "users"
   add_foreign_key "number_open_logs", "boards"
   add_foreign_key "numbers", "cards"
 end

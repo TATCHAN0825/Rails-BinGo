@@ -223,6 +223,16 @@ document.addEventListener("turbolinks:load", function () {
                 }, 1000);
             } else if (type === "closed") {
                 Turbolinks.visit($("#back-link").attr("href"));
+            } else if (type === "chat") {
+                let name = data["name"];
+                let message = data["message"];
+
+                let chatContent = $("#chat-content")
+                let chatContentUl = chatContent.find("ul");
+                chatContentUl.html(chatContentUl.html() + `\n<li>${name}: ${message}</li>`);
+
+                //TODO 一番下までスクロールする処理無理やりすぎる
+                chatContent.scrollTop(10000);
             } else if (type === "reload") {
                 location.reload();
             } else if (type === "error") {
@@ -261,5 +271,14 @@ document.addEventListener("turbolinks:load", function () {
         startButton.addClass("disabled");
         console.log("lottery_start_request");
         board.perform("lottery_start_request");
+    });
+
+    $("#chat-send").on("click", function () {
+        let chatInput = $("#chat-input");
+        if (chatInput.val() === "") {
+            return;
+        }
+        board.perform("chat_send", {message: chatInput.val()});
+        chatInput.val("");
     });
 });

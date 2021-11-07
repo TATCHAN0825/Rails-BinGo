@@ -22,3 +22,8 @@
         }
     }, 100);
 });*/
+
+document.addEventListener("turbolinks:load", function () {
+    //TODO 一番下までスクロールする処理無理やりすぎる
+    $("#chat-content").scrollTop(10000);
+});

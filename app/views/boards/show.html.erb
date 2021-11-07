@@ -117,3 +117,18 @@
 
 <%= link_to 'Edit', edit_board_path(@board) %> |
 <%= link_to 'Back', boards_path, id: 'back-link' %>
+
+<div id="chat">
+  <h5>Chat</h5>
+  <div id="chat-content">
+    <ul>
+      <% @board.chats.each do |chat| %>
+        <li><%= chat.user.name %>: <%= chat.content %></li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="chat-input-box" style="display: flex">
+    <input type="text" id="chat-input">
+    <button class="waves-effect waves-light btn" id="chat-send">送信</button>
+  </div>
+</div>

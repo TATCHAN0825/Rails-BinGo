@@ -1,6 +1,7 @@
 class Board < ApplicationRecord
   has_many :cards, dependent: :destroy
   has_many :number_open_logs, dependent: :destroy
+  has_many :chats, dependent: :destroy
   belongs_to :leader, class_name: 'User', optional: true
   belongs_to :current, class_name: 'User', optional: true
   belongs_to :winner, class_name: 'User', optional: true
