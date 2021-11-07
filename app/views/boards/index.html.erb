@@ -4,6 +4,7 @@
   <thead>
     <tr>
       <th><%= Board.human_attribute_name(:name) %></th>
+      <th><%= Board.human_attribute_name(:phase) %></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -12,6 +13,7 @@
     <% @boards.each do |board| %>
       <tr>
         <td><%= board.name %></td>
+        <td><%= board.phase %></td>
         <% if board.keyword.blank? %>
           <td>
             <%= form_with(url: boards_join_path(board), method: :post) do |form| %>
