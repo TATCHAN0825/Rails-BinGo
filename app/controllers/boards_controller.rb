@@ -22,6 +22,10 @@ class BoardsController < ApplicationController
 
   # GET /boards/1/edit
   def edit
+    unless @board.leader == current_user
+      flash[:alert] = 'リーダー以外は編集できません'
+      redirect_to boards_path
+    end
   end
 
   # POST /boards
@@ -39,6 +43,11 @@ class BoardsController < ApplicationController
 
   # PATCH/PUT /boards/1
   def update
+    unless @board.leader == current_user
+      flash[:alert] = 'リーダー以外は編集できません'
+      redirect_to boards_path
+      return
+    end
     if @board.update(board_params)
       redirect_to @board, notice: 'Board was successfully updated.'
     else
