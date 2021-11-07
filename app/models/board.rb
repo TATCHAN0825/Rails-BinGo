@@ -19,6 +19,10 @@ class Board < ApplicationRecord
     self.cards.find_by(user_id: user)
   end
 
+  def leader?(user)
+    self.leader == user
+  end
+
   private
 
   def send_phase

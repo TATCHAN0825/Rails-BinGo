@@ -22,6 +22,10 @@ class BoardsController < ApplicationController
 
   # GET /boards/1/edit
   def edit
+    unless @board.leader == current_user
+      flash[:alert] = 'リーダー以外は編集できません'
+      redirect_to boards_path
+    end
   end
 
   # POST /boards
@@ -39,6 +43,11 @@ class BoardsController < ApplicationController
 
   # PATCH/PUT /boards/1
   def update
+    unless @board.leader == current_user
+      flash[:alert] = 'リーダー以外は編集できません'
+      redirect_to boards_path
+      return
+    end
     if @board.update(board_params)
       redirect_to @board, notice: 'Board was successfully updated.'
     else
@@ -48,12 +57,22 @@ class BoardsController < ApplicationController
 
   # DELETE /boards/1
   def destroy
+    unless @board.leader == current_user
+      flash[:alert] = 'リーダー以外は削除できません'
+      redirect_to boards_path
+      return
+    end
     @board.destroy
     redirect_to boards_url, notice: 'Board was successfully destroyed.'
   end
 
   # POST /boards/1/join
   def join
+    unless @board.wait?
+      flash[:alert] = 'ゲーム中のため入れません'
+      redirect_to boards_path
+      return
+    end
     keyword = params[:keyword]
     unless @board.cards.find_by(user_id: current_user.id)
       current_user.cards.create(board: @board)
