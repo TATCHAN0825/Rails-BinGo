@@ -80,6 +80,7 @@ class BoardChannel < ApplicationCable::Channel
     current = @board.users.first if current.nil?
     @board.update(current: current)
 
+    BoardBroadcastJob.perform_later(@board.id, { type: 'turn', name: @board.current.name })
     BoardBroadcastJob.perform_later(@board.id, { type: 'your_turn', id: @board.current.id })
   end
 
